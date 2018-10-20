@@ -1,0 +1,232 @@
+---
+title: "Pruebas de exponencialidad"
+author: "Lucia Coudet"
+date: "15 de octubre de 2018"
+output:
+  beamer_presentation:
+    theme: "Frankfurt"
+    colortheme: "default"
+    fonttheme: "structurebold"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(foreign) #read.dta
+library(gridExtra)
+library(moments)
+library(kableExtra)
+```
+
+# Methymelcury Poisoning
+
+Un experimento en Florida (EEUU) diseñado para estudiar el efecto dela aplicación de dosis de metimelcurio (un veneno) en el tiempo de vida de los peces.
+
+Los peces fueron sometidos a varias dosis del veneno.
+
+Al nivel de una dosis, se obtuvieron los siguientes \textbf{tiempos de muerte ordenados} (en días):
+
+$$42, 43, 51, 61, 66, 69, 71, 81, 82, 82$$
+Se quiere estudiar el tiempo de vida de los peces.
+
+#  Definición: failure rate function r(x)
+
+$$ r(x) = \frac{f(x)}{\bar{F(x)}} $$
+en dónde $\bar{F(x)} = 1 - F(x)$
+
+## Interpretación
+
+$r(x) \delta_x$ es la probabilidad de que un ítem (unidad, perosona, parte) viva a la edad x va a fallar en el intervalo $(x, x + \delta_x)$ con $\delta_x$ pequeño.
+Si:
+
+-  $r(x)$ creciente, entonces la tasa de fallo crece conforme crece la edad.
+-  $r(x)$ decreciente, entonces la tasa de fallo decrece conforme a la edad.
+-  $r(x)$ contante, entonces la tasa de fallo ni crece ni decrece conforme con la edad (caso independencia).
+
+# Hipótesis nula de exponencialidad
+
+$$ H_0: r(x)=\lambda $$
+La hipótesis nula de exponencialidad implica suponer una \textbf{tasa constante}, es decir \textbf{\underline{independiente de la edad}}, el cuál es supuesto de la distribución exponencial. A veces se dice que la distribución exponencial \textit{no tiene memoria}, lo cual se debe a lo anterior.
+
+Por lo tanto, podemos escribir la hipótesis nula como:
+
+$$H_0: F(x) = (1 - e^{- \lambda x}) \text{I}_{[x \geq 0]}$$  
+ó 
+$$H_0: \bar{F(x)} = e^{- \lambda x} \text{I}_{[x \geq 0]}$$
+
+# Clases de life distributions
+
+Una distribución de vida $F$ es de la clase:
+
+-  IFR (increasing failure rate), si $r(x)$ es estrictamente no decreciente.
+-  DFR (decreasing failure rate), si $r(x)$ es estrictamente no creciente.
+
+## Es decir:
+
+-  $r(x)$ es IFR sí $r(x) \leq r(y) \, \forall \, x<y$.
+-  $r(x)$ es DFR sí $r(x) \geq r(y) \, \forall \, x<y$
+
+# Prueba y estadistico de prueba
+
+Sea $X_1, \cdots, X_n$ una muestra de $X$ y sean $X_{(1)}, \cdots, X_{(n)}$ los estadísticos de orden, con $X_{0}=0$ se consideran los espacion normalizados $D_1, \cdots, D_n$:
+
+$$D_i = (n-i+1)(X_{(i)} - X_{(i-1)})$$
+
+Entonces tenemos que:
+
+-  $D_1 = nX_{1}$
+-  $D_2 = (n-1)*(X_{2} - X_{1})$
+-  $D_3 = (n-2)*(X_{3} - X_{2})$
+-  $\cdots$
+-  $D_n = 1(X_{n} - X_{n-1})$
+
+# Que hacen los Dn 
+
+Observe que son funciones de los estadísticos de orden. 
+
+Lo que hacen es contar la diferencia entre los estadísticos de orden consecutivos y "ponderar" esa distancia por $n-i+1$. Es decir a las $X_i$ que toman menores valores se las multiplica por algo más grande (se les da mayor peso) y a las que toman valores mas grandes se las multiplica por un número menor (se les da menor peso).
+
+
+# Estadístico de prueba
+
+Sea:
+
+$$S_i = \sum_{u=1}^n D_u \, \, \, \, \, i=1, \cdots, n$$
+
+se define el \textbf{\underline{tiempo total en prueba}} at $X_{(i)}$ como:
+
+$$\epsilon = \frac{\sum_{i=1}^{n-1} S_i}{S_n}$$
+
+# One sided test con alternativa IFR
+
+$H_0: F$ es exponencial 
+
+$H_1: F$ es IFR (y por lo tanto no exponencial)
+
+
+\textbf{\underline{Zona de rechazo}}: $\epsilon \geq e_{\alpha}$
+
+Con $\alpha$ tal que $P(\epsilon \geq e_{alpha}) = \alpha$
+
+# One sided test con alternativa DFR
+
+$H_0: F$ es exponencial
+
+$H_1: F$ es DFR (y por lo tanto no exponencial)
+
+
+\textbf{\underline{Zona de rechazo}}: $\epsilon \leq \frac{n-1}{2} - e_{\alpha}$
+
+# Two sided test con alternativa IFR o DFR
+
+$H_0: F$ es exponencial 
+
+$H_1: F$ es IFR ó DFR (y por lo tanto no exponencial)
+
+
+\textbf{\underline{Zona de rechazo}}: 
+
+-  $\epsilon \geq e_{\frac{\alpha}{2}}$
+-  $\epsilon \leq \frac{n-1}{2} - e_{\frac{\alpha}{2}}$
+
+# Aproximación para muestras grandes
+
+Sea $\epsilon^{*} = \frac{\epsilon - E_0(\epsilon)}{\sqrt{V_0(\epsilon)}} = \frac{\epsilon - \frac{n-1}{2}}{\sqrt{\frac{n-1}{12}}}$ entonces se cumple que:
+
+$$ \epsilon^{*} \overset{n \to \infty}{\to} N(0,1) $$ 
+\textbf{\underline{Zonas de rechazo para muestras grandes}}:
+
+-  Alternativa IFR: $\epsilon^{*} \geq Z_{\alpha}$.
+-  Alternativa DFR: $\epsilon^{*} \leq - Z_{\alpha}$.
+-  Alternativa IFR ó DFR: $|\epsilon^{*}| \geq Z_{\frac{\alpha}{2}}$.
+
+
+# Methylmercury poisining: One sided test contra alternativa IFR
+
+Se quiere testear la hipótesis nula de exponencialidad (tasa $r(x)$ constante) contra la alternativa de tasa creciente, debido a que se sospecha que cuantos más días pasan más crece la probabilidad de muerte.
+
+$H_0: F$ es exponencial 
+
+$H_1: F$ es IFR (y por lo tanto no exponencial)
+
+
+# Methylmercury poisining: One sided test contra alternativa IFR
+
+```{r}
+datos <- c(42, 43, 51, 61, 66, 69, 71, 81, 82, 82)
+datos <- sort(datos) #ya estaban ordenados
+datos_o <- c(0, datos[-length(datos)])
+si <- vector('double', length = length(datos))
+
+for (i in 1:length(datos)){
+      if (i==1){
+      si[i] <- (length(datos) - i + 1)*(datos[i] - datos_o[i])
+      } else{
+            si[i] <- (length(datos) - i + 1)*(datos[i] - datos_o[i]) + si[i-1]      
+      }
+}
+
+suma_si <- sum(si[-length(si)])
+sn <- si[length(si)]
+
+epsilon <- suma_si / sn #epsilon=7.740741
+```
+
+# Methylmercury poisining: One sided test contra alternativa IFR
+
+El estadístico de prueba $\epsilon$ toma valor 7.740741. Buscamos en la tabla para $n=10$ y encontramos $P<.005$ por lo cual existe evidencia empírica en contra d ela hipótesis nula de exponencialidad y a favor de la alternativa IFR.
+
+Observe que $n \geq 9$ por lo cual "podemos" usar la aproximación para muestras grandes de la distribuciuón del estadístico de prueba.
+
+```{r}
+en <- (epsilon - (length(datos)-1)/2) / sqrt((length(datos)-1)/12)
+```
+
+$en$ toma valor 3.742085 por lo que $P < .002$ y por lo tanto la aproximación para muestras grandes confirma la evidencia contra $H_o$ y a favor de \textit{\textbf{age deteroration}}.
+
+
+# Comentarios: Total time on test transforms
+
+$n$ ítems independientes se ponen a prueba para estudiar su supervivencia. Sean $X_1, \cdots, X_n$ sus tiempos de vida observados y sean $X_{(1)}, \cdots, X_{(n)}$ sus valores ordenados (los estadísticos de orden), entonces definimos el tiempo total en prueba al momento $X_{(i)}$:
+
+$$ n X_{(1)} + (n-1)(X_{(2)} - X_{(1)}) + \cdots (n- i + 1)(X_{(i)} - X_{(i-1)}) = $$
+$$ \sum_{u = 1}^i (n - u + 1)(X_{(u)} - X_{(u-1)}) = \sum_{u=1}^i D_U = S_i $$
+Se transforman los estadísticos de orden en $T_1, \cdots, T_n$ de la sieguiente manera:
+$$ T_i = \frac{\sum_{u=1}^i D_U }{ \sum_{u=1}^n D_U } = \frac{S_i}{S_n}$$
+
+
+# Comentarios: Total time on test statistic
+
+$$ \epsilon = \sum_{i=1}^{n-1} T_i$$
+
+-  Bajo $H_0$ cierta, $T_1, \cdots, T_n$ tienen la misma distribución que los estadísticos de orden de una muestra de tamaño $(n-1)$ de una distribución uniforme $(0,1)$.
+
+-  Como la suma de los $(n-1)$ valores oredenados es igual a la suma de los $(n-1)$ valores desordenados, entonces bajo $H_0$ cierta  $\epsilon$ es decir la sumatoria de los $T_i$ tiene la misma distribución que la sumatoria de $(n-1)$ uniformes $(0,1)$ iid. Dado que la esperanza de una uniforme que vive en el intervalo $(0,1)$ es $\frac{1}{2}$ y la varianza es $\frac{1}{12}$ entonces:
+
+$$ E_0(\epsilon) = (n-1)\frac{1}{2} \, \, , \, \, V_0(\epsilon) = (n-1) \frac{1}{12}$$
+
+# Comentarios: Total time on test statistic y TLC
+
+Del TLC obtenemos la aproximación para muestras grandes basada en $\epsilon^{*}$.
+
+# Comentarios: The increasing failure rate average class (IFRA)
+
+$r(x)$ la tasa de fallo puede tener una tendencia creciente pero no ser necesariamente no decreciente, como es requerido en la clase IFR.
+
+La clase IFRA considera el caso por ejemplo en el que $r(x)$ fluctúa por ejemplo debido a variaiones estacionales. En aplicaciones médicas, por ejemplo, una tasa $r(x)$ inicialmente creciente puede decrecer debido a una intervención médica.
+
+De forma análoga definimos la clase \textbf{DFRA} (decreasing failure rate average).
+
+## Observe que:
+
+-  $IFR \subset IFRA$
+-  $DFR \subset DFRA$
+
+# Distribución exponencial
+
+\textbf{Óbservación}
+
+Las distribución exponencial pertenece a la clase $IFR$ y también a la $DFR$ y a su vez es la única distribución que es $IFR$ y $DFR$ a la vez. 
+
+Lo mismo para las clases $IFRA$ y $DFRA$.
