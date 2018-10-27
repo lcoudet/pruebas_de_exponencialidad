@@ -13,9 +13,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
-library(foreign) #read.dta
 library(gridExtra)
-library(moments)
 library(kableExtra)
 ```
 
@@ -83,27 +81,20 @@ Sea $X_1, \ldots, X_n$ una muestra de $X$ y sean $X_{(1)}, \ldots, X_{(n)}$ los 
 
 $$ D_i = (n-i+1)(X_{(i)} - X_{(i-1)})$$
 
-Entonces tenemos que:
+## Entonces tenemos que:
 
-$D_1 = nX_{1}$  
-$D_2 = (n-1) (X_{2} - X_{1})$  
-$D_3 = (n-2) (X_{3} - X_{2})$  
+$D_1 = nX_{(1)}$  
+$D_2 = (n-1) (X_{(2)} - X_{(1)})$  
+$D_3 = (n-2) (X_{(3)} - X_{(2)})$  
 $\vdots$  
-$D_n = 1(X_{n} - X_{n-1})$
-
-# Que hacen los Dn 
-
-Observe que son funciones de los estadísticos de orden. 
-
-Lo que hacen es contar la diferencia entre los estadísticos de orden consecutivos y "ponderar" esa distancia por $n-i+1$. Es decir a las $X_i$ que toman menores valores se las multiplica por algo más grande (se les da mayor peso) y a las que toman valores más grandes se las multiplica por un número menor (se les da menor peso).
+$D_n = 1(X_{(n)} - X_{(n-1)})$
 
 # Estadístico de prueba
 
-Sea:
+A partir del tiempo total en prueba al momento $X_i$:
 
 $$S_i = \sum_{u=1}^i D_u \, \, \, \, \, i=1, \ldots, n$$
-
-se define el \textbf{\underline{tiempo total en prueba}} en $X_{(i)}$ como:
+Se define el estadístico de prueba de la siguiente manera:
 
 $$\epsilon = \frac{1}{S_n} \sum\limits_{i=1}^{n-1} S_i $$
 
@@ -147,9 +138,26 @@ $\epsilon \leq \frac{n-1}{2} - e_{\alpha}$
 
 # Aproximación para muestras grandes
 
-Sea $\epsilon^{*} = \frac{\epsilon - E_0(\epsilon)}{\sqrt{V_0(\epsilon)}} = \frac{\epsilon - \frac{n-1}{2}}{\sqrt{\frac{n-1}{12}}}$ entonces se cumple que:
+Se había definido al estadístico de prueba $\epsilon$ como:
+$$\epsilon = \frac{1}{S_n} \sum\limits_{i=1}^{n-1} S_i$$
 
-$$ \epsilon^{*} \overset{n \to \infty}{\to} N(0,1) $$ 
+Ahora bien, es posible expresarlo en función de $T_1, \cdots, T_n$ dónde:
+$$T_i = \frac{S_i}{S_n} = \frac{\sum_{u=1}^i D_u}{\sum_{u=1}^n D_u}$$
+
+Entonces:
+$$\epsilon = \sum_{i=1}^{n-1} T_i$$
+
+Los cual bajo la hipótesis nula de exoinencialidad corresponde a una suma de VA $U(0,1)$ iid (ver Epstein, 1960) y por lo tanto: $E_0(\epsilon) = \frac{n-1}{2}$ y $V_0(\epsilon) = \frac{n-1}{12}$.
+
+# Aproximación para muestras grandes
+
+Sea entonces $\epsilon^{*} = \frac{\epsilon - E_0(\epsilon)}{\sqrt{V_0(\epsilon)}} = \frac{\epsilon - \frac{n-1}{2}}{\sqrt{\frac{n-1}{12}}}$.
+
+Aplicando el TLC se cumple que:
+
+$$ \epsilon^{*} \overset{n \to \infty}{\to} N(0,1) $$
+
+
 \textbf{\underline{Zonas de rechazo para muestras grandes}}:
 
 - Alternativa IFR: $\epsilon^{*} \geq Z_{\alpha}$.
@@ -196,30 +204,7 @@ en <- (epsilon-(length(datos)-1)/2)/sqrt((length(datos)-1)/12)
 
 $en$ toma el valor `r en` por lo que $P < 0.002$ y por lo tanto la aproximación para muestras grandes confirma la evidencia contra $H_0$ y a favor de \textit{\textbf{age deteroration}}.
 
-# Comentarios: Total time on test transforms
-
-$n$ ítems independientes se ponen a prueba para estudiar su supervivencia. Sean $X_1, \ldots, X_n$ sus tiempos de vida observados y sean $X_{(1)}, \ldots, X_{(n)}$ sus valores ordenados (los estadísticos de orden), entonces definimos el tiempo total en prueba al momento $X_{(i)}$:
-
-$$ n X_{(1)} + (n-1)(X_{(2)} - X_{(1)}) + \ldots (n- i + 1)(X_{(i)} - X_{(i-1)}) = $$
-$$ \sum_{u = 1}^i (n - u + 1)(X_{(u)} - X_{(u-1)}) = \sum_{u=1}^i D_U = S_i $$
-Se transforman los estadísticos de orden en $T_1, \ldots, T_n$ de la siguiente manera:
-$$ T_i = \frac{\sum\limits_{u=1}^i D_u }{ \sum\limits_{u=1}^n D_u } = \frac{S_i}{S_n}$$
-
-# Comentarios: Total time on test statistic
-
-$$ \epsilon = \sum_{i=1}^{n-1} T_i$$
-
-- Bajo $H_0$ cierta, $T_1, \ldots, T_n$ tienen la misma distribución que los estadísticos de orden de una muestra de tamaño $(n-1)$ de una distribución uniforme $(0,1)$.
-
-- Como la suma de los $(n-1)$ valores ordenados es igual a la suma de los $(n-1)$ valores desordenados, entonces bajo $H_0$ cierta  $\epsilon$, es decir, la sumatoria de los $T_i$, tiene la misma distribución que la sumatoria de $(n-1)$ uniformes $(0,1)$ iid. Dado que la esperanza de una uniforme que vive en el intervalo $(0,1)$ es $\frac{1}{2}$ y la varianza es $\frac{1}{12}$ entonces:
-
-$$ E_0(\epsilon) = (n-1)\frac{1}{2} \,\,, \,\, V_0(\epsilon) = (n-1) \frac{1}{12}$$
-
-# Comentarios: Total time on test statistic y TLC
-
-Del TLC obtenemos la aproximación para muestras grandes basada en $\epsilon^{*}$.
-
-# Comentarios: The increasing failure rate average class (IFRA)
+# The increasing failure rate average class (IFRA)
 
 $r(x)$ la tasa de fallo puede tener una tendencia creciente pero no ser necesariamente no decreciente, como es requerido en la clase IFR.
 
