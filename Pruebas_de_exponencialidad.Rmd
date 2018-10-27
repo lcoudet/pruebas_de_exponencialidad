@@ -1,7 +1,7 @@
 ---
 title: "Pruebas de exponencialidad"
-author: "Lucia Coudet"
-date: "15 de octubre de 2018"
+author: "Lucia Coudet - Daniel Czarnievicz"
+date: "Octubre de 2018"
 output:
   beamer_presentation:
     theme: "Frankfurt"
@@ -19,16 +19,24 @@ library(moments)
 library(kableExtra)
 ```
 
+# Tiempo de vida
+
+Se considera una muestra de tiempos de vida $X_1, \cdots, X_n$ que proviene de una distribución subyacente de vida.
+
+## Distribución de vida
+
+Una distribución de vida $F_X(x)$ es una distribución que pone toda su probabilidad en valores no negativos de $X$. Es decir, la variable aleatoria $X$ que mide el tiempo de vida de un objeto, ítem, parte, persona, etc., tiene recorrido no negativo:
+
+$$ F(a)=0 \, \, \, \forall a<0 $$
+
+
 # Methylmercury Poisoning
 
-Un experimento en Florida (EEUU) diseñado para estudiar el efecto de la aplicación de dosis de metilmercurio (un veneno) en el tiempo de vida de los peces.
+Se quiere estudiar el efecto de la aplicación de dosis de metilmercurio (un veneno) en el tiempo de vida de los peces, los cuales fueron sometidos a varias dosis del veneno.
 
-Los peces fueron sometidos a varias dosis del veneno.
-
-Al nivel de una dosis, se obtuvieron los siguientes \textbf{tiempos de muerte ordenados} (en días):
+Al nivel de una dosis, se obtuvieron los siguientes \textbf{tiempos de vida hasta la muerte ordenados} (en días):
 
 $$42, 43, 51, 61, 66, 69, 71, 81, 82, 82$$
-Se quiere estudiar el tiempo de vida de los peces.
 
 # Definición: failure rate function r(x)
 
@@ -46,7 +54,7 @@ $r(x) \delta_x$ es la probabilidad de que un ítem (unidad, persona, parte) viva 
 # Hipótesis nula de exponencialidad
 
 $$ H_0: r(x)=\lambda $$
-La hipótesis nula de exponencialidad implica suponer una \textbf{tasa constante}, es decir \textbf{\underline{independiente de la edad}}, el cual es el supuesto de la distribución exponencial. A veces se dice que la distribución exponencial \textit{no tiene memoria}, lo cual se debe a lo anterior.
+La hipótesis nula de exponencialidad implica suponer una \textbf{tasa constante}, es decir \textbf{\underline{independiente de la edad}}, el cual es el supuesto de la distribución exponencial. A veces se dice que la distribución exponencial \textit{no tiene memoria}, en el sentido que la edad no afecta la probabilidad de muerte.
 
 Por lo tanto, podemos escribir la hipótesis nula como:
 
@@ -54,12 +62,15 @@ $$H_0: F(x) = (1 - e^{- \lambda x}) \text{I}_{[x \geq 0]}$$
 ó, 
 $$H_0: \bar{F}(x) = e^{- \lambda x} \text{I}_{[x \geq 0]}$$
 
-# Clases de life distributions
+# Clases de distribuciones de vida
 
-Una distribución de vida $F$ es de la clase:
 
-- IFR (increasing failure rate), si $r(x)$ es estrictamente no decreciente.
-- DFR (decreasing failure rate), si $r(x)$ es estrictamente no creciente.
+
+\textbf{\underline{Una distribución de vida $F$ es de la clase:}}
+
+- \textbf{IFR (increasing failure rate)}, si $r(x)$ es estrictamente no decreciente.
+
+- \textbf{DFR (decreasing failure rate)}, si $r(x)$ es estrictamente no creciente.
 
 ## Es decir:
 
@@ -68,9 +79,9 @@ Una distribución de vida $F$ es de la clase:
 
 # Prueba y estadistico de prueba
 
-Sea $X_1, \ldots, X_n$ una muestra de $X$ y sean $X_{(1)}, \ldots, X_{(n)}$ los estadísticos de orden, con $X_{0}=0$. Se consideran los espacion normalizados $D_1, \ldots, D_n$:
+Sea $X_1, \ldots, X_n$ una muestra de $X$ y sean $X_{(1)}, \ldots, X_{(n)}$ los estadísticos de orden, con $X_{(0)}=0$. Se consideran los espacion normalizados $D_1, \ldots, D_n$:
 
-$$D_i = (n-i+1)(X_{(i)} - X_{(i-1)})$$
+$$ D_i = (n-i+1)(X_{(i)} - X_{(i-1)})$$
 
 Entonces tenemos que:
 
@@ -90,36 +101,40 @@ Lo que hacen es contar la diferencia entre los estadísticos de orden consecutivo
 
 Sea:
 
-$$S_i = \sum_{u=1}^n D_u \, \, \, \, \, i=1, \ldots, n$$
+$$S_i = \sum_{u=1}^i D_u \, \, \, \, \, i=1, \ldots, n$$
 
 se define el \textbf{\underline{tiempo total en prueba}} en $X_{(i)}$ como:
 
 $$\epsilon = \frac{1}{S_n} \sum\limits_{i=1}^{n-1} S_i $$
 
-# One sided test con alternativa IFR
+# Test a una cola con alternativa IFR
 
-$H_0: F$ es exponencial 
+-  $H_0: F$ es exponencial 
 
-$H_1: F$ es IFR (y por lo tanto no exponencial)
+-  $H_1: F$ es IFR (y por lo tanto no exponencial)
 
-\textbf{\underline{Zona de rechazo}}: $\epsilon \geq e_{\alpha}$
+\textbf{\underline{Zona de rechazo}}
 
-Con $\alpha$ tal que $P(\epsilon \geq e_{alpha}) = \alpha$
+$\epsilon \geq e_{\alpha}$
 
-# One sided test con alternativa DFR
+Con $\alpha$ tal que $P(\epsilon \geq e_{\alpha}) = \alpha$
 
-$H_0: F$ es exponencial
+# Test a una cola con alternativa DFR
 
-$H_1: F$ es DFR (y por lo tanto no exponencial)
+-  $H_0: F$ es exponencial
+
+-  $H_1: F$ es DFR (y por lo tanto no exponencial)
 
 
-\textbf{\underline{Zona de rechazo}}: $\epsilon \leq \frac{n-1}{2} - e_{\alpha}$
+\textbf{\underline{Zona de rechazo}}
 
-# Two sided test con alternativa IFR o DFR
+$\epsilon \leq \frac{n-1}{2} - e_{\alpha}$
 
-$H_0: F$ es exponencial 
+# Test a dos colas con alternativa IFR o DFR
 
-$H_1: F$ es IFR o DFR (y por lo tanto no exponencial)
+-  $H_0: F$ es exponencial 
+
+-  $H_1: F$ es IFR o DFR (y por lo tanto no exponencial)
 
 \textbf{\underline{Zona de rechazo}}: 
 
@@ -137,15 +152,15 @@ $$ \epsilon^{*} \overset{n \to \infty}{\to} N(0,1) $$
 - Alternativa DFR: $\epsilon^{*} \leq - Z_{\alpha}$.
 - Alternativa IFR o DFR: $|\epsilon^{*}| \geq Z_{\frac{\alpha}{2}}$.
 
-# Methylmercury poisoning: One sided test contra alternativa IFR
+# Methylmercury poisoning: Test a una cola con alternativa IFR
 
-Se quiere testear la hipótesis nula de exponencialidad (tasa $r(x)$ constante) contra la alternativa de tasa creciente, debido a que se sospecha que cuantos más días pasan más crece la probabilidad de muerte.
+Se quiere testear la hipótesis nula de exponencialidad (tasa $r(x)$ constante) contra la alternativa de tasa creciente, debido a que se sospecha que cuantos más días pasan más crece la probabilidad de que los peces mueran.
 
-$H_0: F$ es exponencial 
+-  $H_0: F$ es exponencial 
 
-$H_1: F$ es IFR (y por lo tanto no exponencial)
+-  $H_1: F$ es IFR (y por lo tanto no exponencial)
 
-# Methylmercury poisoning: One sided test contra alternativa IFR
+# Methylmercury poisoning: Test a una cola con alternativa IFR
 
 ```{r}
 datos <- sort(c(42, 43, 51, 61, 66, 69, 71, 81, 82, 82))
@@ -165,7 +180,7 @@ sn <- si[length(si)]
 epsilon <- suma_si / sn
 ```
 
-# Methylmercury poisoning: One sided test contra alternativa IFR
+# Methylmercury poisoning: Test a una cola con alternativa IFR
 
 El estadístico de prueba $\epsilon$ toma el valor `r epsilon`. Buscamos en la tabla para $n=10$ y encontramos $P<0.005$ por lo cual existe evidencia empírica en contra de la hipótesis nula de exponencialidad y a favor de la alternativa IFR.
 
