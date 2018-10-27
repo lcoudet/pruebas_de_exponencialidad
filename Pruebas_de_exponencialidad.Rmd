@@ -107,6 +107,10 @@ se define el \textbf{\underline{tiempo total en prueba}} en $X_{(i)}$ como:
 
 $$\epsilon = \frac{1}{S_n} \sum\limits_{i=1}^{n-1} S_i $$
 
+# Interpretación del tiempo total en prueba al momento $X_{(i)}$
+
+![](dibujito.png)
+
 # Test a una cola con alternativa IFR
 
 -  $H_0: F$ es exponencial 
