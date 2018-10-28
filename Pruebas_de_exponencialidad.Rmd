@@ -45,17 +45,37 @@ donde $T$ son los tiempos de supervivencia de los individuos.
 - Estimador de la función de riesgo:
 
 $$\hat{h}(t) = \frac{d_j}{ n_j ( t_{(j+1)} - t_{(j)} ) } $$
-<!--
+
 # Tiempo de vida
 
-Se considera una muestra de tiempos de vida $X_1, \ldots, X_n$ que proviene de una distribución subyacente de vida.
+- El complemento de la función de supervivencia es la **función de tiempo de vida**: $F(t) = P(T \leq t) = 1 - S(t)$.  
+- Toda función para la cual $F(a) = 0 \,\,\, \forall a < 0$ es una distribución de vida.  
+- Existen muchas clases de distribuciones de vida:
+      - IFR: increasing failure rate.  
+      - DFR: decreasing failure rate.  
+      - NBU: new better than used.  
+      - DMRL: decreasing mean residual life.  
 
-## Distribución de vida
+# Tiempo de vida
 
-Una distribución de vida $F_X(x)$ es una distribución que pone toda su probabilidad en valores no negativos de $X$. Es decir, la variable aleatoria $X$ que mide el tiempo de vida de un objeto, ítem, parte, persona, etc., tiene recorrido no negativo:
+- A su vez, existen muchas familias de distribución que pueden describir distintas clases de funciones de vida, dependiendo de su parametrización. Por ejemplo:
 
-$$F(a) = 0 \,\,\, \forall a < 0$$
--->
+\begin{center}
+      \begin{tabular}{| l | c | c | c |}
+      \hline
+                  & DFR          & CFR                      & IFR \\ 
+      \hline
+      \hline
+      Exponencial &              & $\forall \lambda > 0$    &        \\ 
+      \hline
+      Weibull     & $\alpha < 1$ & Exponencial              & $\alpha > 1$ \\ 
+      \hline
+      Gamma       & $\alpha < 1$ & Exponencial              & $\alpha > 1$ \\ 
+      \hline
+      \end{tabular}
+\end{center}
+
+- Debido a estas relaciones es que el análisis de supervivencia está intimamente relacionado con las pruebas de exponencialidad. Los investigadores buscan estudiar cómo cambia la probabilidad de ocurrencia del evento de interés.
 
 # Methylmercury Poisoning
 
