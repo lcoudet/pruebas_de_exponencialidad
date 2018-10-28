@@ -9,7 +9,6 @@ output:
     fonttheme: "structurebold"
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
@@ -17,16 +16,29 @@ library(gridExtra)
 library(kableExtra)
 ```
 
+# Análisis de supervivencia
+
+- Métodos utilizados para el análisis de información donde la variable de resultado es el tiempo hasta la ocurrencia de un evento de interés.  
+- Requiere de técnicas especiales dado que:
+  1. La información suele seguir distribuciones asimétricas, por lo que la normalidad no es un supuesto razonable.  
+  2. Algunas unidads muestrales pueden no haber llegado al fin del experimiento, por lo que se estaría en presencia de datos censurados.  
+
+# Función de supervivencia
+
+
+# Función de riesgo
+
+<!--
 # Tiempo de vida
 
-Se considera una muestra de tiempos de vida $X_1, \cdots, X_n$ que proviene de una distribución subyacente de vida.
+Se considera una muestra de tiempos de vida $X_1, \ldots, X_n$ que proviene de una distribución subyacente de vida.
 
 ## Distribución de vida
 
 Una distribución de vida $F_X(x)$ es una distribución que pone toda su probabilidad en valores no negativos de $X$. Es decir, la variable aleatoria $X$ que mide el tiempo de vida de un objeto, ítem, parte, persona, etc., tiene recorrido no negativo:
 
-$$ F(a)=0 \, \, \, \forall a<0 $$
-
+$$F(a) = 0 \,\,\, \forall a < 0$$
+-->
 
 # Methylmercury Poisoning
 
@@ -61,8 +73,6 @@ $$H_0: F(x) = (1 - e^{- \lambda x}) \text{I}_{[x \geq 0]}$$
 $$H_0: \bar{F}(x) = e^{- \lambda x} \text{I}_{[x \geq 0]}$$
 
 # Clases de distribuciones de vida
-
-
 
 \textbf{\underline{Una distribución de vida $F$ es de la clase:}}
 
