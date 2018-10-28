@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(gridExtra)
 library(kableExtra)
+library(ggrepel)
 ```
 
 # Análisis de supervivencia
@@ -128,7 +129,7 @@ Sea $X_1, \ldots, X_n$ una muestra de $X$ y sean $X_{(1)}, \ldots, X_{(n)}$ los 
 
 $$ D_i = (n-i+1)(X_{(i)} - X_{(i-1)})$$
 
-## Entonces tenemos que:
+Entonces tenemos que:
 
 $D_1 = nX_{(1)}$  
 $D_2 = (n-1) (X_{(2)} - X_{(1)})$  
@@ -140,14 +141,64 @@ $D_n = 1(X_{(n)} - X_{(n-1)})$
 
 A partir del tiempo total en prueba al momento $X_i$:
 
-$$S_i = \sum_{u=1}^i D_u \, \, \, \, \, i=1, \ldots, n$$
-Se define el estadístico de prueba de la siguiente manera:
+$$S_i = \sum_{u=1}^i D_u \,\,\,\,\, i=1, \ldots, n$$
+se define el estadístico de prueba de la siguiente manera:
 
-$$\epsilon = \frac{1}{S_n} \sum\limits_{i=1}^{n-1} S_i $$
+$$\varepsilon = \frac{1}{S_n} \sum\limits_{i=1}^{n-1} S_i $$
 
+<!--
 # Interpretación del tiempo total en prueba al momento $X_{(i)}$
 
 ![](dibujito.png)
+-->
+
+# Interpretación del tiempo total en prueba al momento $X_{(i)}$
+
+```{r, echo=FALSE}
+ggplot() +
+      # geom_point(data=data.frame(x=c(0,10,10,0), y=c(0,0,10,0)), aes(x,y)) +
+      geom_line(data=data.frame(x=c(0, 10), y=c(10, 10)), aes(x,y), 
+                arrow=arrow(), size=0.5) +
+      geom_text(data=data.frame(x=11, y=10, lab="Tiempo"), aes(x,y,label=lab)) +
+      geom_text(data=data.frame(x=c(2, 3, 4, 5, 6, 7, 8, 9), y=9.5,
+            lab=c("X[1]", "X[2]", "X[3]", "ldots", "X[i-1]", "X[i]", "ldots", "X[n]")), 
+            aes(x,y,label=lab), parse=TRUE) +
+      geom_line(data=data.frame(x=c(2,2,3,3,4,4,6,6,7,7,9,9), y=rep(c(9.75,10.25), 6)),
+                aes(x,y, group=x)) +
+      geom_rect(data=data.frame(
+            xmin=c(0,2,3,4,6,7),
+            xmax=c(2,3,4,6,7,9),
+            ymin=0,
+            ymax=c(9,8,7,5,4,2)), 
+            aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="grey", color="black") +
+      geom_line(data=data.frame(
+            x=c(0,2,0,3,0,4,0,6,0,7,0,9),
+            y=c(9,9,8,8,7,7,5,5,4,4,2,2)),
+            aes(x,y, group=y), arrow=arrow(), size=0.75, color="red") +
+      geom_text(data=data.frame(
+            x=-1,
+            y=c(-1,-2,-3,-4.5,-6,-7,-8),
+            lab=c("S[1]","S[2]","S[3]","cdots","S[i]","cdots","S[n]")),
+            aes(x,y,label=lab), parse=TRUE) +
+      geom_text(data=data.frame(
+            x=-.70,
+            y=c(-1,-2,-3,-4,-6,-7,-8),
+            lab=c("=","=","=","","=","","=")),
+            aes(x=x, y=y+0.1, label=lab), parse=FALSE) +
+      geom_text(data=data.frame(
+            x=c( 1,  2.5, 3.5,  5,  6.5,  7.5,  8.5),
+            y=c(-1, -2,  -3,   -4.5, -6, -7, -8),
+            lab=c("n * X[1]","(n-1)*(X[2]-X[1])","(n-2)*(X[3]-X[2])","cdots",
+                  "(n-i+1)*(X[i]-X[i-1])","cdots","(1)*(X[n]-X[n-1])")),
+            aes(x, y, label=lab), parse=TRUE) +
+      geom_text(data=data.frame(
+            x=c( 2, 3, 4, 6,   7, 8),
+            y=c(-1,-2,-3,-4.5,-6,-7),
+            lab=c("+")),
+            aes(x=x, y=y-0.5, label=lab), parse=FALSE) +
+      labs(x=NULL, y=NULL) +
+      theme_void()
+```
 
 # Test a una cola con alternativa IFR
 
