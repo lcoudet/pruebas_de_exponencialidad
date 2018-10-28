@@ -25,9 +25,26 @@ library(kableExtra)
 
 # Función de supervivencia
 
+- Se define la **función de supervivencia** como la probabilidad de que el tiempo de supervivencia $T$ sea mayor a un tiempo $t$:
+
+$$ S(t) = P(T \geq t)$$
+
+- Ante presencia de datos censurados, la misma se estima mediante el estimador de Kaplan-Meier:
+
+$$\hat{S}(t) = \prod\limits_{j / t_{(j)} \leq t} \left( 1 - \frac{d_j}{r_j} \right) $$
+donde $d_j$ es el número de individuos que experimentaor el suceso de interés en el momento $t_{(j)}$, y $r_j$ es el número de individuos en riesgo inmediatamente antes del momento $t_{(j)}$.
 
 # Función de riesgo
 
+- El objetivo de la función de riesgo es estudiar qué períodos tienen mayor probabilidad de ocurrencia del suceso de interés.  
+- Se define la **función de riesgo** como la probabilidad de que un individuo experimente el suceso de interés en un intervalo pequeño de tiempo, $s$, dado que ha sobrrrvivido hasta el inicio del intervalo, para cualquier intervalo cuya longitud tiende a cero:
+
+$$h(t) = \lim\limits_{s \rightarrow 0} \frac{ P(t \leq T \leq t+s | T \geq t) }{ s } $$
+donde $T$ son los tiempos de supervivencia de los individuos.
+
+- Estimador de la función de riesgo:
+
+$$\hat{h}(t) = \frac{d_j}{ n_j ( t_{(j+1)} - t_{(j)} ) } $$
 <!--
 # Tiempo de vida
 
