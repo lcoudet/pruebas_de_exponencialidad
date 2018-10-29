@@ -338,7 +338,14 @@ $en$ toma el valor `r round(en,4)` por lo que $P < 0.002$ y por lo tanto la apro
 
 - Las clases **New better than used** (NBU) y **New worst than used** (NWU) buscan modelar fenómemos en los cuales la probabilidad de supervivencia de nuevas unidades es mejor (peor) que aquella de las unidades ya existentes.  
 
+\vspace{0.1 cm}
+
 - Para ello deben considerarse (al igual que las pruebas anteriores), los objetos de todas las edades que han sobrevidido hasta el momento $x$.  
+
+### Relaciones entre clases
+
+- $IFR \subset IFRA \subset NBU \subset NBUE$  
+- $DFR \subset DFRA \subset NWU \subset NWUE$
 
 ## Hipótesis de la prueba
 
@@ -376,14 +383,40 @@ $$
 
 ## Zonas de rechazo
 
+- Prueba a una cola contra alternativa de NBU: rechazar H0 si $T \leq t_{1;\alpha}$ para un nivel de significación $\alpha$.  
+
+\vspace{0.5cm}
+
+- Prueba a una cola contra alternativa de NWU: rechazar H0 si $T \geq t_{2;\alpha}$ para un nivel de significación $\alpha$.
+
+\vspace{0.5cm}
+
+- Prueba a dos colas contra alternativa de NBU o NWB: rechazar H0 si $T \leq t_{1;\alpha_1}$ o si $T \geq t_{1;\alpha_2}$ para un nivel de significación $\alpha_1 + \alpha_2 = \alpha$.
+
 
 ## Aproximaciones para muestras grandes
 
+- Se define el estadístico: 
+$$T^* = \frac{ T - E_{H0} (T) }{ \sqrt{V_{H0}(T)} } \overset{d}{\rightarrow} N(0; \,1) $$
+
+\vspace{0.5cm}
+
+- Prueba a una cola contra alternativa de NBU: rechazar H0 si $T^* \leq -z_{\alpha}$ para un nivel de significación $\alpha$.  
+
+\vspace{0.15cm}
+
+- Prueba a una cola contra alternativa de NWU: rechazar H0 si $T^* \geq z_{\alpha}$ para un nivel de significación $\alpha$.
+
+\vspace{0.15cm}
+
+- Prueba a dos colas contra alternativa de NBU o NWB: rechazar H0 si $T^* \leq -z_{\alpha_1}$ o si $T^* \geq z_{\alpha_2}$ para un nivel de significación $\alpha_1 + \alpha_2 = \alpha$.
 
 # Ejemplo: methylmercury poisoning (continuación)
 
+## Ejemplo
 
+ Para este ejemplo no es necesario calcular $\psi$ para todos los trios $i>j>k$ dado que $X_{(10)} < X_{(1)} + X_{(2)}$, por lo que todas valen 0. Por lo tanto, $T=0$.  
+ 
+ Hollander y Proschan (1972) prueban que, para $n\geq 3$, $P_{H0}(T=0) =$ ${2n-2}\choose{n}$ $^{-1}$
 
-
-
-
+Por lo tanto, $P_{H0}(T=0) = 0.00002$ para nuestro caso con $n=10$. Dicho p-valor permite rechazar H0 (exponencialidad), a favor de NBU.
