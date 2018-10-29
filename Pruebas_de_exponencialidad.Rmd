@@ -4,6 +4,8 @@ author: "Lucia Coudet - Daniel Czarnievicz"
 date: "Octubre de 2018"
 output:
   beamer_presentation:
+    slide_level: 2
+    toc: true
     theme: "Frankfurt"
     colortheme: "default"
     fonttheme: "structurebold"
@@ -19,12 +21,14 @@ library(ggrepel)
 
 # Análisis de supervivencia
 
+## Análisis de supervivencia
+
 - Métodos utilizados para el análisis de información donde la variable de resultado es el tiempo hasta la ocurrencia de un evento de interés.  
 - Requiere de técnicas especiales dado que:
   1. La información suele seguir distribuciones asimétricas, por lo que la normalidad no es un supuesto razonable.  
   2. Algunas unidads muestrales pueden no haber llegado al fin del experimiento, por lo que se estaría en presencia de datos censurados.  
 
-# Función de supervivencia
+## Función de supervivencia
 
 - Se define la **función de supervivencia** como la probabilidad de que el tiempo de supervivencia $T$ sea mayor a un tiempo $t$:
 
@@ -35,7 +39,7 @@ $$ S(t) = P(T \geq t)$$
 $$\hat{S}(t) = \prod\limits_{j / t_{(j)} \leq t} \left( 1 - \frac{d_j}{r_j} \right) $$
 donde $d_j$ es el número de individuos que experimentaor el suceso de interés en el momento $t_{(j)}$, y $r_j$ es el número de individuos en riesgo inmediatamente antes del momento $t_{(j)}$.
 
-# Función de riesgo
+## Función de riesgo
 
 - El objetivo de la función de riesgo es estudiar qué períodos tienen mayor probabilidad de ocurrencia del suceso de interés.  
 - Se define la **función de riesgo** como la probabilidad de que un individuo experimente el suceso de interés en un intervalo pequeño de tiempo, $s$, dado que ha sobrrrvivido hasta el inicio del intervalo, para cualquier intervalo cuya longitud tiende a cero:
@@ -47,7 +51,7 @@ donde $T$ son los tiempos de supervivencia de los individuos.
 
 $$\hat{h}(t) = \frac{d_j}{ n_j ( t_{(j+1)} - t_{(j)} ) } $$
 
-# Tiempo de vida
+## Tiempo de vida
 
 - El complemento de la función de supervivencia es la **función de tiempo de vida**: $F(t) = P(T \leq t) = 1 - S(t)$.  
 - Toda función para la cual $F(a) = 0 \,\,\, \forall a < 0$ es una distribución de vida.  
@@ -57,7 +61,7 @@ $$\hat{h}(t) = \frac{d_j}{ n_j ( t_{(j+1)} - t_{(j)} ) } $$
       - NBU: new better than used.  
       - DMRL: decreasing mean residual life.  
 
-# Tiempo de vida
+## Tiempo de vida
 
 - A su vez, existen muchas familias de distribución que pueden describir distintas clases de funciones de vida, dependiendo de su parametrización. Por ejemplo:
 
@@ -78,12 +82,12 @@ $$\hat{h}(t) = \frac{d_j}{ n_j ( t_{(j+1)} - t_{(j)} ) } $$
 
 - Debido a estas relaciones es que el análisis de supervivencia está intimamente relacionado con las pruebas de exponencialidad. Los investigadores buscan estudiar cómo cambia la probabilidad de ocurrencia del evento de interés.
 
-# Definición: failure rate function r(x)
+## Failure rate function r(x)
 
 $$ r(x) = \frac{f(x)}{\bar{F}(x)} $$
 en donde $\bar{F}(x) = 1 - F(x)$
 
-## Interpretación
+### Interpretación
 
 $r(x) \delta_x$ es la probabilidad de que un ítem (unidad, persona, parte) viva a la edad $x$ fallezca en el intervalo $(x, x + \delta_x)$ con $\delta_x$ pequeño. Si:
 
@@ -91,7 +95,7 @@ $r(x) \delta_x$ es la probabilidad de que un ítem (unidad, persona, parte) viva 
 -  $r(x)$ decreciente, entonces la tasa de fallecimiento decrece conforme a la edad.
 -  $r(x)$ contante, entonces la tasa de fallecimiento ni crece ni decrece con la edad (independencia).
 
-# Clases de distribuciones de vida
+## Clases de distribuciones de vida
 
 \textbf{\underline{Una distribución de vida $F$ es de la clase:}}
 
@@ -99,12 +103,12 @@ $r(x) \delta_x$ es la probabilidad de que un ítem (unidad, persona, parte) viva 
 
 - \textbf{DFR (decreasing failure rate)}, si $r(x)$ es estrictamente no creciente.
 
-## Es decir:
+### Es decir:
 
 - $r(x)$ es IFR si $r(x) \leq r(y) \, \forall \, x<y$.
 - $r(x)$ es DFR si $r(x) \geq r(y) \, \forall \, x<y$.
 
-# The increasing failure rate average class (IFRA)
+## The increasing failure rate average class (IFRA)
 
 $r(x)$ la tasa de fallo puede tener una tendencia creciente pero no ser necesariamente no decreciente, como es requerido en la clase IFR.
 
@@ -112,12 +116,12 @@ La clase IFRA considera el caso en el que $r(x)$ fluctúa, por ejemplo, debido a 
 
 De forma análoga definimos la clase \textbf{DFRA} (decreasing failure rate average).
 
-## Observe que:
+### Observe que:
 
 - $IFR \subset IFRA$
 - $DFR \subset DFRA$
 
-# Distribución exponencial
+## Distribución exponencial
 
 \textbf{Observación}
 
@@ -125,7 +129,9 @@ Las distribución exponencial pertenece a la clase $IFR$ y también a la $DFR$ y a
 
 Lo mismo para las clases $IFRA$ y $DFRA$.
 
-# Hipótesis nula de exponencialidad
+# Test contra alternativas IFR y DFR
+
+## Hipótesis nula de exponencialidad
 
 $$ H_0: r(x)=\lambda $$
 La hipótesis nula de exponencialidad implica suponer una \textbf{tasa constante}, es decir \textbf{\underline{independiente de la edad}}, el cual es el supuesto de la distribución exponencial. A veces se dice que la distribución exponencial \textit{no tiene memoria}, en el sentido que la edad no afecta la probabilidad de muerte.
@@ -136,7 +142,7 @@ $$H_0: F(x) = (1 - e^{- \lambda x}) \text{I}_{[x \geq 0]}$$
 ó, 
 $$H_0: \bar{F}(x) = e^{- \lambda x} \text{I}_{[x \geq 0]}$$
 
-# Prueba y estadistico de prueba
+## Prueba y estadistico de prueba
 
 Sea $X_1, \ldots, X_n$ una muestra de $X$ y sean $X_{(1)}, \ldots, X_{(n)}$ los estadísticos de orden, con $X_{(0)}=0$. Se consideran los espacion normalizados $D_1, \ldots, D_n$:
 
@@ -150,7 +156,7 @@ $D_3 = (n-2) (X_{(3)} - X_{(2)})$
 $\vdots$  
 $D_n = 1(X_{(n)} - X_{(n-1)})$
 
-# Estadístico de prueba
+## Estadístico de prueba
 
 A partir del tiempo total en prueba al momento $X_i$:
 
@@ -165,7 +171,7 @@ $$\varepsilon = \frac{1}{S_n} \sum\limits_{i=1}^{n-1} S_i $$
 ![](dibujito.png)
 -->
 
-# Interpretación del tiempo total en prueba al momento $X_{(i)}$
+## Interpretación del tiempo total en prueba al momento $X_{(i)}$
 
 ```{r, echo=FALSE}
 ggplot() +
@@ -213,7 +219,7 @@ ggplot() +
       theme_void()
 ```
 
-# Test a una cola con alternativa IFR
+## Test a una cola con alternativa IFR
 
 -  $H_0: F$ es exponencial 
 
@@ -225,7 +231,7 @@ $\varepsilon \geq e_{\alpha}$
 
 Con $\alpha$ tal que $P(\varepsilon \geq e_{\alpha}) = \alpha$
 
-# Test a una cola con alternativa DFR
+## Test a una cola con alternativa DFR
 
 -  $H_0: F$ es exponencial
 
@@ -236,7 +242,7 @@ Con $\alpha$ tal que $P(\varepsilon \geq e_{\alpha}) = \alpha$
 
 $\varepsilon \leq \frac{n-1}{2} - e_{\alpha}$
 
-# Test a dos colas con alternativa IFR o DFR
+## Test a dos colas con alternativa IFR o DFR
 
 -  $H_0: F$ es exponencial 
 
@@ -247,7 +253,7 @@ $\varepsilon \leq \frac{n-1}{2} - e_{\alpha}$
 -  $\varepsilon \geq e_{\frac{\alpha}{2}}$
 -  $\varepsilon \leq \frac{n-1}{2} - e_{\frac{\alpha}{2}}$
 
-# Aproximación para muestras grandes
+## Aproximación para muestras grandes
 
 Se había definido al estadístico de prueba $\epsilon$ como:
 $$\varepsilon = \frac{1}{S_n} \sum\limits_{i=1}^{n-1} S_i$$
@@ -260,7 +266,7 @@ $$\varepsilon = \sum_{i=1}^{n-1} T_i$$
 
 Los cual bajo la hipótesis nula de exoinencialidad corresponde a una suma de VA $U(0,1)$ iid (ver Epstein, 1960) y por lo tanto: $E_0(\varepsilon) = \frac{n-1}{2}$ y $V_0(\varepsilon) = \frac{n-1}{12}$.
 
-# Aproximación para muestras grandes
+## Aproximación para muestras grandes
 
 Sea entonces $\varepsilon^{*} = \frac{\varepsilon - E_0(\varepsilon)}{\sqrt{V_0(\varepsilon)}} = \frac{\varepsilon - \frac{n-1}{2}}{\sqrt{\frac{n-1}{12}}}$.
 
@@ -275,7 +281,9 @@ $$ \varepsilon^{*} \overset{n \to \infty}{\to} N(0,1) $$
 - Alternativa DFR: $\varepsilon^{*} \leq - Z_{\alpha}$.
 - Alternativa IFR o DFR: $|\varepsilon^{*}| \geq Z_{\frac{\alpha}{2}}$.
 
-# Methylmercury Poisoning
+# Ejemplo: methylmercury poisoning
+
+## Methylmercury Poisoning
 
 Se quiere estudiar el efecto de la aplicación de dosis de metilmercurio (un veneno) en el tiempo de vida de los peces, los cuales fueron sometidos a varias dosis del veneno.
 
@@ -283,7 +291,7 @@ Al nivel de una dosis, se obtuvieron los siguientes \textbf{tiempos de vida hast
 
 $$42, 43, 51, 61, 66, 69, 71, 81, 82, 82$$
 
-# Methylmercury poisoning: Test a una cola con alternativa IFR
+## Methylmercury poisoning: Test a una cola con alternativa IFR
 
 Se quiere testear la hipótesis nula de exponencialidad (tasa $r(x)$ constante) contra la alternativa de tasa creciente, debido a que se sospecha que cuantos más días pasan más crece la probabilidad de que los peces mueran.
 
@@ -291,7 +299,7 @@ Se quiere testear la hipótesis nula de exponencialidad (tasa $r(x)$ constante) c
 
 -  $H_1: F$ es IFR (y por lo tanto no exponencial)
 
-# Methylmercury poisoning: Test a una cola con alternativa IFR
+## Methylmercury poisoning: Test a una cola con alternativa IFR
 
 ```{r}
 datos <- sort(c(42, 43, 51, 61, 66, 69, 71, 81, 82, 82))
@@ -311,7 +319,7 @@ sn <- si[length(si)]
 epsilon <- suma_si / sn
 ```
 
-# Methylmercury poisoning: Test a una cola con alternativa IFR
+## Methylmercury poisoning: Test a una cola con alternativa IFR
 
 El estadístico de prueba $\epsilon$ toma el valor `r round(epsilon,4)`. Buscamos en la tabla para $n=10$ y encontramos $P<0.005$ por lo cual existe evidencia empírica en contra de la hipótesis nula de exponencialidad y a favor de la alternativa IFR.
 
@@ -323,4 +331,59 @@ en <- (epsilon-(length(datos)-1)/2) /
 ```
 
 $en$ toma el valor `r round(en,4)` por lo que $P < 0.002$ y por lo tanto la aproximación para muestras grandes confirma la evidencia contra $H_0$ y a favor de \textit{\textbf{age deteroration}}.
+
+# Test contra alternativas NBU y NWU
+
+## Las clases NBU y NWU
+
+- Las clases **New better than used** (NBU) y **New worst than used** (NWU) buscan modelar fenómemos en los cuales la probabilidad de supervivencia de nuevas unidades es mejor (peor) que aquella de las unidades ya existentes.  
+
+- Para ello deben considerarse (al igual que las pruebas anteriores), los objetos de todas las edades que han sobrevidido hasta el momento $x$.  
+
+## Hipótesis de la prueba
+
+Lo anterior se refleja en la hipótesis:
+
+$$H0: P(X \geq x + y | X \geq x) = P(X \geq y) \,\,\,\, \forall x;y \geq 0$$
+
+la cual podemos reescribir utilizando las funciones de vida como:
+
+$$H0: \frac{ \bar{F}(x+y) }{ \bar{F}(x) } = \bar{F}(y) \,\,\,\, \forall x;y \geq 0$$
+
+### Relación con las clases NBU y NWU
+
+- Si $\bar{F}(x+y) \leq \bar{F}(x) \bar{F}(y) \,\,\,\, \forall ;y \geq 0$, entonces la clase es NBU.  
+
+- Si $\bar{F}(x+y) \geq \bar{F}(x) \bar{F}(y) \,\,\,\, \forall ;y \geq 0$, entonces la clase es NWU.  
+
+## Estadístico de prueba
+
+- Para construir el estadístico deprueba primero debemos ordenar la muestra.  
+- Luego computamos el estadístico: 
+
+$$ T = \sum\limits_{ i > j > k} \psi(X_{(i)}; \, X_{(j)} + X_{(k)}   ) $$
+donde:
+
+$$\psi(a;b) = 
+\left\{
+\begin{array}{c c c}
+1    & \text{si} & a > b \\
+^1 / _2  & \text{si} & a = b \\
+0    & \text{si} &a < b
+\end{array}
+\right.
+$$
+
+## Zonas de rechazo
+
+
+## Aproximaciones para muestras grandes
+
+
+# Ejemplo: methylmercury poisoning (continuación)
+
+
+
+
+
 
