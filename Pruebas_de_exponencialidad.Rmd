@@ -69,22 +69,14 @@ $$\hat{h}(t) = \frac{d_j}{ n_j ( t_{(j+1)} - t_{(j)} ) } $$
       \hline
       Exponencial &              & $\forall \lambda > 0$    &        \\ 
       \hline
-      Weibull     & $\alpha < 1$ & Exponencial              & $\alpha > 1$ \\ 
+      Weibull     & $\alpha < 1$ & $\alpha = 1$             & $\alpha > 1$ \\ 
       \hline
-      Gamma       & $\alpha < 1$ & Exponencial              & $\alpha > 1$ \\ 
+      Gamma       & $\alpha < 1$ & $\alpha = 1$             & $\alpha > 1$ \\ 
       \hline
       \end{tabular}
 \end{center}
 
 - Debido a estas relaciones es que el análisis de supervivencia está intimamente relacionado con las pruebas de exponencialidad. Los investigadores buscan estudiar cómo cambia la probabilidad de ocurrencia del evento de interés.
-
-# Methylmercury Poisoning
-
-Se quiere estudiar el efecto de la aplicación de dosis de metilmercurio (un veneno) en el tiempo de vida de los peces, los cuales fueron sometidos a varias dosis del veneno.
-
-Al nivel de una dosis, se obtuvieron los siguientes \textbf{tiempos de vida hasta la muerte ordenados} (en días):
-
-$$42, 43, 51, 61, 66, 69, 71, 81, 82, 82$$
 
 # Definición: failure rate function r(x)
 
@@ -122,6 +114,14 @@ $$H_0: \bar{F}(x) = e^{- \lambda x} \text{I}_{[x \geq 0]}$$
 
 - $r(x)$ es IFR si $r(x) \leq r(y) \, \forall \, x<y$.
 - $r(x)$ es DFR si $r(x) \geq r(y) \, \forall \, x<y$.
+
+# Distribución exponencial
+
+\textbf{Observación}
+
+Las distribución exponencial pertenece a la clase $IFR$ y también a la $DFR$ y a su vez es la única distribución que es $IFR$ y $DFR$ a la vez. 
+
+Lo mismo para las clases $IFRA$ y $DFRA$.
 
 # Prueba y estadistico de prueba
 
@@ -208,9 +208,9 @@ ggplot() +
 
 \textbf{\underline{Zona de rechazo}}
 
-$\epsilon \geq e_{\alpha}$
+$\varepsilon \geq e_{\alpha}$
 
-Con $\alpha$ tal que $P(\epsilon \geq e_{\alpha}) = \alpha$
+Con $\alpha$ tal que $P(\varepsilon \geq e_{\alpha}) = \alpha$
 
 # Test a una cola con alternativa DFR
 
@@ -221,7 +221,7 @@ Con $\alpha$ tal que $P(\epsilon \geq e_{\alpha}) = \alpha$
 
 \textbf{\underline{Zona de rechazo}}
 
-$\epsilon \leq \frac{n-1}{2} - e_{\alpha}$
+$\varepsilon \leq \frac{n-1}{2} - e_{\alpha}$
 
 # Test a dos colas con alternativa IFR o DFR
 
@@ -231,36 +231,44 @@ $\epsilon \leq \frac{n-1}{2} - e_{\alpha}$
 
 \textbf{\underline{Zona de rechazo}}: 
 
--  $\epsilon \geq e_{\frac{\alpha}{2}}$
--  $\epsilon \leq \frac{n-1}{2} - e_{\frac{\alpha}{2}}$
+-  $\varepsilon \geq e_{\frac{\alpha}{2}}$
+-  $\varepsilon \leq \frac{n-1}{2} - e_{\frac{\alpha}{2}}$
 
 # Aproximación para muestras grandes
 
 Se había definido al estadístico de prueba $\epsilon$ como:
-$$\epsilon = \frac{1}{S_n} \sum\limits_{i=1}^{n-1} S_i$$
+$$\varepsilon = \frac{1}{S_n} \sum\limits_{i=1}^{n-1} S_i$$
 
-Ahora bien, es posible expresarlo en función de $T_1, \cdots, T_n$ dónde:
-$$T_i = \frac{S_i}{S_n} = \frac{\sum_{u=1}^i D_u}{\sum_{u=1}^n D_u}$$
+Ahora bien, es posible expresarlo en función de $T_1, \ldots, T_n$ dónde:
+$$T_i = \frac{S_i}{S_n} = \frac{\sum\limits_{u=1}^i D_u}{\sum\limits_{u=1}^n D_u}$$
 
 Entonces:
-$$\epsilon = \sum_{i=1}^{n-1} T_i$$
+$$\varepsilon = \sum_{i=1}^{n-1} T_i$$
 
-Los cual bajo la hipótesis nula de exoinencialidad corresponde a una suma de VA $U(0,1)$ iid (ver Epstein, 1960) y por lo tanto: $E_0(\epsilon) = \frac{n-1}{2}$ y $V_0(\epsilon) = \frac{n-1}{12}$.
+Los cual bajo la hipótesis nula de exoinencialidad corresponde a una suma de VA $U(0,1)$ iid (ver Epstein, 1960) y por lo tanto: $E_0(\varepsilon) = \frac{n-1}{2}$ y $V_0(\varepsilon) = \frac{n-1}{12}$.
 
 # Aproximación para muestras grandes
 
-Sea entonces $\epsilon^{*} = \frac{\epsilon - E_0(\epsilon)}{\sqrt{V_0(\epsilon)}} = \frac{\epsilon - \frac{n-1}{2}}{\sqrt{\frac{n-1}{12}}}$.
+Sea entonces $\varepsilon^{*} = \frac{\varepsilon - E_0(\varepsilon)}{\sqrt{V_0(\varepsilon)}} = \frac{\varepsilon - \frac{n-1}{2}}{\sqrt{\frac{n-1}{12}}}$.
 
 Aplicando el TLC se cumple que:
 
-$$ \epsilon^{*} \overset{n \to \infty}{\to} N(0,1) $$
+$$ \varepsilon^{*} \overset{n \to \infty}{\to} N(0,1) $$
 
 
 \textbf{\underline{Zonas de rechazo para muestras grandes}}:
 
-- Alternativa IFR: $\epsilon^{*} \geq Z_{\alpha}$.
-- Alternativa DFR: $\epsilon^{*} \leq - Z_{\alpha}$.
-- Alternativa IFR o DFR: $|\epsilon^{*}| \geq Z_{\frac{\alpha}{2}}$.
+- Alternativa IFR: $\varepsilon^{*} \geq Z_{\alpha}$.
+- Alternativa DFR: $\varepsilon^{*} \leq - Z_{\alpha}$.
+- Alternativa IFR o DFR: $|\varepsilon^{*}| \geq Z_{\frac{\alpha}{2}}$.
+
+# Methylmercury Poisoning
+
+Se quiere estudiar el efecto de la aplicación de dosis de metilmercurio (un veneno) en el tiempo de vida de los peces, los cuales fueron sometidos a varias dosis del veneno.
+
+Al nivel de una dosis, se obtuvieron los siguientes \textbf{tiempos de vida hasta la muerte ordenados} (en días):
+
+$$42, 43, 51, 61, 66, 69, 71, 81, 82, 82$$
 
 # Methylmercury poisoning: Test a una cola con alternativa IFR
 
@@ -292,15 +300,16 @@ epsilon <- suma_si / sn
 
 # Methylmercury poisoning: Test a una cola con alternativa IFR
 
-El estadístico de prueba $\epsilon$ toma el valor `r epsilon`. Buscamos en la tabla para $n=10$ y encontramos $P<0.005$ por lo cual existe evidencia empírica en contra de la hipótesis nula de exponencialidad y a favor de la alternativa IFR.
+El estadístico de prueba $\epsilon$ toma el valor `r round(epsilon,4)`. Buscamos en la tabla para $n=10$ y encontramos $P<0.005$ por lo cual existe evidencia empírica en contra de la hipótesis nula de exponencialidad y a favor de la alternativa IFR.
 
 Observe que $n \geq 9$ por lo cual "podemos" usar la aproximación para muestras grandes de la distribuciuón del estadístico de prueba.
 
 ```{r}
-en <- (epsilon-(length(datos)-1)/2)/sqrt((length(datos)-1)/12)
+en <- (epsilon-(length(datos)-1)/2) / 
+      sqrt((length(datos)-1)/12)
 ```
 
-$en$ toma el valor `r en` por lo que $P < 0.002$ y por lo tanto la aproximación para muestras grandes confirma la evidencia contra $H_0$ y a favor de \textit{\textbf{age deteroration}}.
+$en$ toma el valor `r round(en,4)` por lo que $P < 0.002$ y por lo tanto la aproximación para muestras grandes confirma la evidencia contra $H_0$ y a favor de \textit{\textbf{age deteroration}}.
 
 # The increasing failure rate average class (IFRA)
 
@@ -314,11 +323,3 @@ De forma análoga definimos la clase \textbf{DFRA} (decreasing failure rate avera
 
 - $IFR \subset IFRA$
 - $DFR \subset DFRA$
-
-# Distribución exponencial
-
-\textbf{Observación}
-
-Las distribución exponencial pertenece a la clase $IFR$ y también a la $DFR$ y a su vez es la única distribución que es $IFR$ y $DFR$ a la vez. 
-
-Lo mismo para las clases $IFRA$ y $DFRA$.
