@@ -91,17 +91,6 @@ $r(x) \delta_x$ es la probabilidad de que un ítem (unidad, persona, parte) viva 
 -  $r(x)$ decreciente, entonces la tasa de fallecimiento decrece conforme a la edad.
 -  $r(x)$ contante, entonces la tasa de fallecimiento ni crece ni decrece con la edad (independencia).
 
-# Hipótesis nula de exponencialidad
-
-$$ H_0: r(x)=\lambda $$
-La hipótesis nula de exponencialidad implica suponer una \textbf{tasa constante}, es decir \textbf{\underline{independiente de la edad}}, el cual es el supuesto de la distribución exponencial. A veces se dice que la distribución exponencial \textit{no tiene memoria}, en el sentido que la edad no afecta la probabilidad de muerte.
-
-Por lo tanto, podemos escribir la hipótesis nula como:
-
-$$H_0: F(x) = (1 - e^{- \lambda x}) \text{I}_{[x \geq 0]}$$  
-ó, 
-$$H_0: \bar{F}(x) = e^{- \lambda x} \text{I}_{[x \geq 0]}$$
-
 # Clases de distribuciones de vida
 
 \textbf{\underline{Una distribución de vida $F$ es de la clase:}}
@@ -115,6 +104,19 @@ $$H_0: \bar{F}(x) = e^{- \lambda x} \text{I}_{[x \geq 0]}$$
 - $r(x)$ es IFR si $r(x) \leq r(y) \, \forall \, x<y$.
 - $r(x)$ es DFR si $r(x) \geq r(y) \, \forall \, x<y$.
 
+# The increasing failure rate average class (IFRA)
+
+$r(x)$ la tasa de fallo puede tener una tendencia creciente pero no ser necesariamente no decreciente, como es requerido en la clase IFR.
+
+La clase IFRA considera el caso en el que $r(x)$ fluctúa, por ejemplo, debido a variaiones estacionales. En aplicaciones médicas una tasa $r(x)$ inicialmente creciente puede decrecer debido a una intervención médica.
+
+De forma análoga definimos la clase \textbf{DFRA} (decreasing failure rate average).
+
+## Observe que:
+
+- $IFR \subset IFRA$
+- $DFR \subset DFRA$
+
 # Distribución exponencial
 
 \textbf{Observación}
@@ -122,6 +124,17 @@ $$H_0: \bar{F}(x) = e^{- \lambda x} \text{I}_{[x \geq 0]}$$
 Las distribución exponencial pertenece a la clase $IFR$ y también a la $DFR$ y a su vez es la única distribución que es $IFR$ y $DFR$ a la vez. 
 
 Lo mismo para las clases $IFRA$ y $DFRA$.
+
+# Hipótesis nula de exponencialidad
+
+$$ H_0: r(x)=\lambda $$
+La hipótesis nula de exponencialidad implica suponer una \textbf{tasa constante}, es decir \textbf{\underline{independiente de la edad}}, el cual es el supuesto de la distribución exponencial. A veces se dice que la distribución exponencial \textit{no tiene memoria}, en el sentido que la edad no afecta la probabilidad de muerte.
+
+Por lo tanto, podemos escribir la hipótesis nula como:
+
+$$H_0: F(x) = (1 - e^{- \lambda x}) \text{I}_{[x \geq 0]}$$  
+ó, 
+$$H_0: \bar{F}(x) = e^{- \lambda x} \text{I}_{[x \geq 0]}$$
 
 # Prueba y estadistico de prueba
 
@@ -311,15 +324,3 @@ en <- (epsilon-(length(datos)-1)/2) /
 
 $en$ toma el valor `r round(en,4)` por lo que $P < 0.002$ y por lo tanto la aproximación para muestras grandes confirma la evidencia contra $H_0$ y a favor de \textit{\textbf{age deteroration}}.
 
-# The increasing failure rate average class (IFRA)
-
-$r(x)$ la tasa de fallo puede tener una tendencia creciente pero no ser necesariamente no decreciente, como es requerido en la clase IFR.
-
-La clase IFRA considera el caso en el que $r(x)$ fluctúa, por ejemplo, debido a variaiones estacionales. En aplicaciones médicas una tasa $r(x)$ inicialmente creciente puede decrecer debido a una intervención médica.
-
-De forma análoga definimos la clase \textbf{DFRA} (decreasing failure rate average).
-
-## Observe que:
-
-- $IFR \subset IFRA$
-- $DFR \subset DFRA$
