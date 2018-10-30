@@ -16,7 +16,6 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(gridExtra)
 library(kableExtra)
-library(ggrepel)
 ```
 
 # Análisis de supervivencia
@@ -55,7 +54,7 @@ $$\hat{h}(t) = \frac{d_j}{ n_j ( t_{(j+1)} - t_{(j)} ) } $$
 
 - El complemento de la función de supervivencia es la **función de tiempo de vida**: $F(t) = P(T \leq t) = 1 - S(t)$.  
 - Toda función para la cual $F(a) = 0 \,\,\, \forall a < 0$ es una distribución de vida.  
-- Existen muchas clases de distribuciones de vida:
+- Existen muchas clases de distribuciones de vida, por ejemplo:
       - IFR: increasing failure rate.  
       - DFR: decreasing failure rate.  
       - NBU: new better than used.  
@@ -82,7 +81,7 @@ $$\hat{h}(t) = \frac{d_j}{ n_j ( t_{(j+1)} - t_{(j)} ) } $$
 
 - Debido a estas relaciones es que el análisis de supervivencia está intimamente relacionado con las pruebas de exponencialidad. Los investigadores buscan estudiar cómo cambia la probabilidad de ocurrencia del evento de interés.
 
-## Failure rate function r(x)
+## Failure rate function 
 
 $$ r(x) = \frac{f(x)}{\bar{F}(x)} $$
 en donde $\bar{F}(x) = 1 - F(x)$
@@ -93,7 +92,7 @@ $r(x) \delta_x$ es la probabilidad de que un ítem (unidad, persona, parte) viva 
 
 -  $r(x)$ creciente, entonces la tasa de fallecimiento crece conforme crece la edad.
 -  $r(x)$ decreciente, entonces la tasa de fallecimiento decrece conforme a la edad.
--  $r(x)$ contante, entonces la tasa de fallecimiento ni crece ni decrece con la edad (independencia).
+-  $r(x)$ constante, entonces la tasa de fallecimiento ni crece ni decrece con la edad (independencia).
 
 ## Clases de distribuciones de vida
 
@@ -128,6 +127,8 @@ De forma análoga definimos la clase \textbf{DFRA} (decreasing failure rate avera
 Las distribución exponencial pertenece a la clase $IFR$ y también a la $DFR$ y a su vez es la única distribución que es $IFR$ y $DFR$ a la vez. 
 
 Lo mismo para las clases $IFRA$ y $DFRA$.
+
+
 
 # Test contra alternativas IFR y DFR
 
@@ -180,7 +181,8 @@ ggplot() +
                 arrow=arrow(), size=0.5) +
       geom_text(data=data.frame(x=11, y=10, lab="Tiempo"), aes(x,y,label=lab)) +
       geom_text(data=data.frame(x=c(2, 3, 4, 5, 6, 7, 8, 9), y=9.5,
-            lab=c("X[1]", "X[2]", "X[3]", "ldots", "X[i-1]", "X[i]", "ldots", "X[n]")), 
+            lab=c("X[(1)]", "X[(2)]", "X[(3)]", "ldots", "X[(i-1)]", "X[(i)]",
+                  "ldots", "X[(n)]")), 
             aes(x,y,label=lab), parse=TRUE) +
       geom_line(data=data.frame(x=c(2,2,3,3,4,4,6,6,7,7,9,9), y=rep(c(9.75,10.25), 6)),
                 aes(x,y, group=x)) +
@@ -207,8 +209,8 @@ ggplot() +
       geom_text(data=data.frame(
             x=c( 1,  2.5, 3.5,  5,  6.5,  7.5,  8.5),
             y=c(-1, -2,  -3,   -4.5, -6, -7, -8),
-            lab=c("n * X[1]","(n-1)*(X[2]-X[1])","(n-2)*(X[3]-X[2])","cdots",
-                  "(n-i+1)*(X[i]-X[i-1])","cdots","(1)*(X[n]-X[n-1])")),
+            lab=c("n * X[(1)]","(n-1)*(X[(2)]-X[(1)])","(n-2)*(X[(3)]-X[(2)])","cdots",
+                  "(n-i+1)*(X[(i)]-X[(i-1)])","cdots","(1)*(X[(n)]-X[(n-1)])")),
             aes(x, y, label=lab), parse=TRUE) +
       geom_text(data=data.frame(
             x=c( 2, 3, 4, 6,   7, 8),
@@ -223,7 +225,7 @@ ggplot() +
 
 -  $H_0: F$ es exponencial 
 
--  $H_1: F$ es IFR (y por lo tanto no exponencial)
+-  $H_1: F$ es IFR (y no exponencial)
 
 \textbf{\underline{Zona de rechazo}}
 
@@ -235,7 +237,7 @@ Con $\alpha$ tal que $P(\varepsilon \geq e_{\alpha}) = \alpha$
 
 -  $H_0: F$ es exponencial
 
--  $H_1: F$ es DFR (y por lo tanto no exponencial)
+-  $H_1: F$ es DFR (y no exponencial)
 
 
 \textbf{\underline{Zona de rechazo}}
@@ -255,7 +257,7 @@ $\varepsilon \leq \frac{n-1}{2} - e_{\alpha}$
 
 ## Aproximación para muestras grandes
 
-Se había definido al estadístico de prueba $\epsilon$ como:
+Se había definido al estadístico de prueba $\varepsilon$ como:
 $$\varepsilon = \frac{1}{S_n} \sum\limits_{i=1}^{n-1} S_i$$
 
 Ahora bien, es posible expresarlo en función de $T_1, \ldots, T_n$ dónde:
@@ -264,7 +266,7 @@ $$T_i = \frac{S_i}{S_n} = \frac{\sum\limits_{u=1}^i D_u}{\sum\limits_{u=1}^n D_u
 Entonces:
 $$\varepsilon = \sum_{i=1}^{n-1} T_i$$
 
-Los cual bajo la hipótesis nula de exoinencialidad corresponde a una suma de VA $U(0,1)$ iid (ver Epstein, 1960) y por lo tanto: $E_0(\varepsilon) = \frac{n-1}{2}$ y $V_0(\varepsilon) = \frac{n-1}{12}$.
+El cual bajo $H_0$ corresponde a una suma de VA $U(0,1)$ iid y por lo tanto: $E_0(\varepsilon) = \frac{n-1}{2}$ y $V_0(\varepsilon) = \frac{n-1}{12}$.
 
 ## Aproximación para muestras grandes
 
@@ -321,7 +323,7 @@ epsilon <- suma_si / sn
 
 ## Methylmercury poisoning: Test a una cola con alternativa IFR
 
-El estadístico de prueba $\epsilon$ toma el valor `r round(epsilon,4)`. Buscamos en la tabla para $n=10$ y encontramos $P<0.005$ por lo cual existe evidencia empírica en contra de la hipótesis nula de exponencialidad y a favor de la alternativa IFR.
+El estadístico de prueba $\varepsilon$ toma el valor `r round(epsilon,4)`. Buscamos en la tabla para $n=10$ y encontramos $P<0.005$ por lo cual existe evidencia empírica en contra de la hipótesis nula de exponencialidad y a favor de la alternativa IFR.
 
 Observe que $n \geq 9$ por lo cual "podemos" usar la aproximación para muestras grandes de la distribuciuón del estadístico de prueba.
 
@@ -330,7 +332,7 @@ en <- (epsilon-(length(datos)-1)/2) /
       sqrt((length(datos)-1)/12)
 ```
 
-$en$ toma el valor `r round(en,4)` por lo que $P < 0.002$ y por lo tanto la aproximación para muestras grandes confirma la evidencia contra $H_0$ y a favor de \textit{\textbf{age deteroration}}.
+$en$ toma el valor `r round(en,4)` por lo que $P < 0.002$ y por lo tanto la aproximación para muestras grandes confirma la evidencia contra $H_0$ y a favor de IFR.
 
 # Test contra alternativas NBU y NWU
 
@@ -351,17 +353,17 @@ $en$ toma el valor `r round(en,4)` por lo que $P < 0.002$ y por lo tanto la apro
 
 Lo anterior se refleja en la hipótesis:
 
-$$H0: P(X \geq x + y | X \geq x) = P(X \geq y) \,\,\,\, \forall x;y \geq 0$$
+$$H_0: P(X \geq x + y | X \geq x) = P(X \geq y) \,\,\,\, \forall x;y \geq 0$$
 
 la cual podemos reescribir utilizando las funciones de vida como:
 
-$$H0: \frac{ \bar{F}(x+y) }{ \bar{F}(x) } = \bar{F}(y) \,\,\,\, \forall x;y \geq 0$$
+$$H_0: \frac{ \bar{F}(x+y) }{ \bar{F}(x) } = \bar{F}(y) \,\,\,\, \forall x;y \geq 0$$
 
 ### Relación con las clases NBU y NWU
 
-- Si $\bar{F}(x+y) \leq \bar{F}(x) \bar{F}(y) \,\,\,\, \forall ;y \geq 0$, entonces la clase es NBU.  
+- Si $\bar{F}(x+y) \leq \bar{F}(x) \bar{F}(y) \,\,\,\, \forall x;y \geq 0$, entonces la clase es NBU.  
 
-- Si $\bar{F}(x+y) \geq \bar{F}(x) \bar{F}(y) \,\,\,\, \forall ;y \geq 0$, entonces la clase es NWU.  
+- Si $\bar{F}(x+y) \geq \bar{F}(x) \bar{F}(y) \,\,\,\, \forall x;y \geq 0$, entonces la clase es NWU.  
 
 ## Estadístico de prueba
 
@@ -391,25 +393,25 @@ $$
 
 \vspace{0.5cm}
 
-- Prueba a dos colas contra alternativa de NBU o NWB: rechazar H0 si $T \leq t_{1;\alpha_1}$ o si $T \geq t_{1;\alpha_2}$ para un nivel de significación $\alpha_1 + \alpha_2 = \alpha$.
+- Prueba a dos colas contra alternativa de NBU o NWB: rechazar $H_0$ si $T \leq t_{1;\alpha_1}$ o si $T \geq t_{1;\alpha_2}$ para un nivel de significación $\alpha_1 + \alpha_2 = \alpha$.
 
 
 ## Aproximaciones para muestras grandes
 
 - Se define el estadístico: 
-$$T^* = \frac{ T - E_{H0} (T) }{ \sqrt{V_{H0}(T)} } \overset{d}{\rightarrow} N(0; \,1) $$
+$$T^* = \frac{ T - E_{H_0} (T) }{ \sqrt{V_{H_0}(T)} } \overset{d}{\rightarrow} N(0; \,1) $$
 
 \vspace{0.5cm}
 
-- Prueba a una cola contra alternativa de NBU: rechazar H0 si $T^* \leq -z_{\alpha}$ para un nivel de significación $\alpha$.  
+- Prueba a una cola contra alternativa de NBU: rechazar $H_0$ si $T^* \leq -z_{\alpha}$ para un nivel de significación $\alpha$.  
 
 \vspace{0.15cm}
 
-- Prueba a una cola contra alternativa de NWU: rechazar H0 si $T^* \geq z_{\alpha}$ para un nivel de significación $\alpha$.
+- Prueba a una cola contra alternativa de NWU: rechazar $H_0$ si $T^* \geq z_{\alpha}$ para un nivel de significación $\alpha$.
 
 \vspace{0.15cm}
 
-- Prueba a dos colas contra alternativa de NBU o NWB: rechazar H0 si $T^* \leq -z_{\alpha_1}$ o si $T^* \geq z_{\alpha_2}$ para un nivel de significación $\alpha_1 + \alpha_2 = \alpha$.
+- Prueba a dos colas contra alternativa de NBU o NWU: rechazar $H_0$ si $T^* \leq -z_{\alpha_1}$ o si $T^* \geq z_{\alpha_2}$ para un nivel de significación $\alpha_1 + \alpha_2 = \alpha$.
 
 # Ejemplo: methylmercury poisoning (continuación)
 
@@ -420,3 +422,15 @@ $$T^* = \frac{ T - E_{H0} (T) }{ \sqrt{V_{H0}(T)} } \overset{d}{\rightarrow} N(0
  Hollander y Proschan (1972) prueban que, para $n\geq 3$, $P_{H0}(T=0) =$ ${2n-2}\choose{n}$ $^{-1}$
 
 Por lo tanto, $P_{H0}(T=0) = 0.00002$ para nuestro caso con $n=10$. Dicho p-valor permite rechazar H0 (exponencialidad), a favor de NBU.
+
+# Bibliografía
+
+## Bibliografía
+
+- Hadley Wickham (2017). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 1.2.1. https://CRAN.R-project.org/package=tidyverse  
+
+- Hollander, M., Wolfe, D. A., & Chicken, E. (2013). Nonparametric statistical methods (Vol. 751). John Wiley & Sons.  
+
+- Hothorn, T., & Everitt, B. S. (2009). A handbook of statistical analyses using R. Chapman and Hall/CRC.  
+
+- R Core Team (2018). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
